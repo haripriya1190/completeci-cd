@@ -283,5 +283,197 @@ The foundation for Kubernetes, CI/CD, and GitOps workflows is established
 
 ✅ Day 0 Status: Completed & Verified
 
+📅 Day 0 – Step 3
+Repository Initialization & Terraform Provider Validation
+Objective
+
+Finalize Day 0 by:
+
+Initializing the project repository
+
+Creating a clean, scalable directory structure
+
+Validating Terraform ↔ Proxmox API connectivity
+
+Making the first meaningful Git commit
+
+This marks the transition from environment setup to infrastructure provisioning.
+
+🔹 STEP 3.1 — Initialize Project Repository
+
+Run on your Ubuntu DevOps control node:
+
+mkdir devops-proxmox-platform
+cd devops-proxmox-platform
 
 
+Create directory structure:
+
+mkdir -p terraform/{modules,environments/prod}
+mkdir -p ansible/{roles,inventory}
+mkdir -p kubernetes
+mkdir -p docs
+
+
+Initialize Git:
+
+git init
+git status
+
+🔹 STEP 3.2 — Terraform Provider Configuration (Proxmox)
+
+Create provider file:
+
+nano terraform/environments/prod/provider.tf
+
+
+Paste:
+
+terraform {
+  required_providers {
+    proxmox = {
+      source  = "Telmate/proxmox"
+      version = "~> 3.0"
+    }
+  }
+}
+
+provider "proxmox" {
+  pm_api_url          = var.pm_api_url
+  pm_api_token_id     = var.pm_api_token_id
+  pm_api_token_secret = var.pm_api_token_secret
+  pm_tls_insecure     = true
+}
+
+🔹 STEP 3.3 — Terraform Variables (Secure)
+
+Create variables file:
+
+nano terraform/environments/prod/variables.tf
+
+variable "pm_api_url" {
+  description = "Proxmox API endpoint"
+  type        = string
+}
+
+variable "pm_api_token_id" {
+  description = "Proxmox API token ID"
+  type        = string
+  sensitive   = true
+}
+
+variable "pm_api_token_secret" {
+  description = "Proxmox API token secret"
+  type        = string
+  sensitive   = true
+}
+
+
+👉 Do NOT create tfvars with secrets
+We will rely on environment variables (already exported).
+🔹 STEP 3.4 — Terraform Initialization & Validation
+
+Move into environment directory:
+
+cd terraform/environments/prod
+
+
+Initialize Terraform:
+
+terraform init
+
+
+Validate configuration:
+
+terraform validate
+
+
+Expected:
+
+Success! The configuration is valid.
+
+
+✔ This confirms:
+
+Proxmox API access works
+
+Token permissions are correct
+
+Provider is functioning
+🔹 STEP 3.5 — First Git Commit (Important)
+
+Go back to repo root:
+
+cd ~/devops-proxmox-platform
+
+
+Create .gitignore:
+
+nano .gitignore
+
+.terraform/
+*.tfstate
+*.tfstate.*
+.crash.log
+.env
+
+
+Commit:
+
+git add .
+git commit -m "Day 0: secure environment setup and Terraform provider validation"
+
+📄 Documentation (Add This Now)
+
+Create or update:
+
+docs/day-0-environment-setup.md
+
+Add This Section (Copy-Paste)
+## Repository Initialization & Terraform Validation (Day 0 – Step 3)
+
+After establishing secure SSH and API access to the Proxmox platform, the project repository was initialized with a modular and scalable structure.
+
+Terraform provider configuration was implemented using token-based authentication, and connectivity to the Proxmox API was validated using `terraform init` and `terraform validate`.
+
+No secrets are stored in version control. Sensitive values are injected via environment variables in alignment with security best practices.
+
+✅ Day 0 – FINAL Exit Criteria
+
+✔ Tooling installed and verified
+✔ SSH key-based access to Proxmox working
+✔ API token-based authentication enabled
+✔ Terraform provider validated
+✔ Repository initialized
+✔ First clean Git commit completed
+
+🏁 Day 0 Status: COMPLETED
+
+Append to:
+
+docs/day-0-environment-setup.md
+
+Copy-Paste
+## Terraform Provider Version Management
+
+During Terraform initialization, the Proxmox provider version constraint was adjusted to align with the provider’s actual release strategy.
+
+The Telmate Proxmox provider currently maintains stable releases in the 2.x series. A conservative version constraint (`~> 2.9`) was selected to allow non-breaking patch upgrades while preventing unexpected major changes.
+
+This approach ensures stability and predictability in infrastructure provisioning.
+
+✅ Day 0 – FINAL Verification Checklist (Updated)
+
+✔ SSH key-based access working
+✔ Proxmox API token validated
+✔ Terraform provider downloaded successfully
+✔ Version constraints correctly pinned
+✔ terraform init and terraform validate successful
+✔ Clean Git history
+
+🔒 Final Step for Day 0 (Do This Now)
+
+Commit the fix:
+
+git add terraform/environments/prod/provider.tf docs/day-0-environment-setup.md
+git commit -m "Day 0: fix Proxmox provider version constraint and validate init"
