@@ -293,3 +293,6 @@ git push
 - Aligned disk schema with Proxmox API using slot-based interfaces (scsi0)
 - Successfully provisioned Kubernetes master and worker nodes via Terraform
 
+- Worker node required MAC regeneration at the hypervisor level to resolve duplicated DHCP identity after cloning.
+
+
