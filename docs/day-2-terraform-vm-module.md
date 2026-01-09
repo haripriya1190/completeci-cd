@@ -283,3 +283,13 @@ git push
 🧠 Promotion Soundbite (Use This)
 
 “I implemented a reusable Terraform module to provision Proxmox VMs from a Golden Image, separated environment concerns, fixed provider resolution issues, and validated the infrastructure lifecycle end to end.”
+
+
+## Day 2 – Terraform VM Provisioning (Completed)
+
+- Implemented reusable Terraform module for Proxmox VM provisioning
+- Migrated from telmate/proxmox to bpg/proxmox due to provider limitations
+- Explicitly wired providers across root and child modules
+- Aligned disk schema with Proxmox API using slot-based interfaces (scsi0)
+- Successfully provisioned Kubernetes master and worker nodes via Terraform
+
